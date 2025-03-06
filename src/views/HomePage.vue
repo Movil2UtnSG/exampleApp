@@ -11,20 +11,33 @@ import {
     IonItem,
     IonAvatar,
     IonLabel,
-    IonButton
+    IonButton,
+    IonSelect,
+    IonSelectOption
 } from '@ionic/vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
-const contactos = ref([
-    { name: 'Huey', id: 1, img: 'https://ui-avatars.com/api/?name=Huey' },
-    { name: 'Dewey', id: 2, img: 'https://ui-avatars.com/api/?name=Dewey' },
-    { name: 'Louie', id: 3, img: 'https://ui-avatars.com/api/?name=Louie' },
-    { name: 'Fooie', id: 4, img: 'https://ui-avatars.com/api/?name=Fooie' }
-]);
+const contactos = ref([]);
 
 function deleteItem(id: number) {
     contactos.value = contactos.value.filter((item) => item.id !== id);
 }
+function onChange(event: any) {
+    console.log(event.detail.value);
+}
+
+async function getDatos(){
+    
+   const datos = await axios.get('https://jsonplaceholder.typicode.com/users');
+    contactos.value = datos.data;
+   
+}
+
+onMounted(() => {
+    getDatos();
+});
+
 </script>
 <template>
     <ion-page>
@@ -49,6 +62,11 @@ function deleteItem(id: number) {
                 </ion-item>
                
             </ion-list>
+            <ion-select @ionChange="onChange($event)">
+                <ion-select-option value="1">One</ion-select-option>
+                <ion-select-option value="2">Two</ion-select-option>
+                <ion-select-option value="3">Three</ion-select-option>
+            </ion-select>
         </ion-content>
     </ion-page>
 
